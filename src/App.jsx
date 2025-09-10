@@ -1,26 +1,33 @@
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import HomePage from '../pages/homePage'
+import LoginPage from '../pages/loginPage'
+import RegisterPage from '../pages/registerPage'
 import './App.css'
-import ProductCard from './components/productCard'
-import SuperProduct from './components/superProduct'
+import AdminPage from '../pages/adminPages'
+
 
 function App() {
 
 
   return (
-    <>
-      <div className ="w-full h-screen bg-blue-300">
-       <div className="w-[600px] h-[600px] bg-black flex flex-col justify-center relative">
-       <div className="w-[75px] h-[75px] bg-yellow-600"></div>
-        <div className="w-[75px] h-[75px] bg-red-900"></div>
-         <div className="w-[75px] h-[75px] bg-green-600"></div>
-       <div className="w-[75px] h-[75px] bg-purple-600 fixed right-[5px] top-[5px]"></div>
-        <div className="w-[75px] h-[75px] bg-pink-600 absolute right-[5px] top-[5px]"></div>
-        <div className="w-[75px] h-[75px] bg-orange-600"></div>
-      </div>
-      </div>
+        <BrowserRouter>
+
+     <div className="w-full h-screen flex justify-center items-center">
+        <div className="w-[calc(100vw-35px)] h-[calc(100vh-15px)] border border-red-700">
+           <Routes path="/">
+          <Route path="/" element={<HomePage/>}/>
+           <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route path="/admin/*" element={<AdminPage/>}/>
+          </Routes>
+         
+        </div>
+        </div>
      
-    </>
-  )
+    </BrowserRouter>
+
+  );
 }
 
 export default App
