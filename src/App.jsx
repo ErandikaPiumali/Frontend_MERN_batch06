@@ -6,6 +6,7 @@ import RegisterPage from '../pages/registerPage'
 import './App.css'
 import AdminPage from '../pages/adminPages'
 import TestPage from '../pages/testPage'
+import { Toaster } from 'react-hot-toast'
 
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
 
      <div className="w-full h-screen flex justify-center items-center">
         <div className="w-[calc(100vw-35px)] h-[calc(100vh-15px)] border border-red-700">
+
+          <Toaster position="top-right"/>
            <Routes path="/">
           <Route path="/" element={<HomePage/>}/>
            <Route path="/login" element={<LoginPage/>}/>
