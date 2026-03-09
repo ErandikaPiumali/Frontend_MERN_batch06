@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import uploadFile from "../../src/utils/mediaUpload";
 
 export default function AddProductPage(){
 
@@ -9,20 +11,35 @@ export default function AddProductPage(){
           const [alternativeNames,setAlternativeNames] =useState("");
            const [labelledPrice,setLabelledPrice] =useState("");
             const [price,setPrice] =useState("");
-             const [images,setImages] =useState("");
+             const [images,setImages] =useState([]);
                  const [description,setDescription] =useState("");
                   const [stock,setStock] =useState("");
                    const [isAvailable,setIsAvailable] =useState(true);
                     const [category,setCategory] =useState("cream");
+                    const Navigate=useNavigate()
                    
-function handleSubmit(){
+
+
+                async function handleSubmit(){
+                       const promiseArray=[]
+                        for(let i=0;i<images.length;i++){
+                                const responses=await Promise.all(promiseArray)
+                                console.log(responses)
+                                
+                                const promise=uploadFile(images[i])
+                              //  console.log(images[i]);
+                              promiseArray[i]=promise
+                        }
+                       
+    const  altNamesInArray = alternativeNames.split(",")
+                    
         const productData={
                 productId:productId,
                 name:productName,
-                altNames:alternativeNames,
+                altNames:altNamesInArray,
                 labelledPrice:labelledPrice,
                 price:price,
-                images:images,
+                images:[],
                 description:description,
                 stock:stock,
                 isAvailable:isAvailable,
@@ -43,15 +60,18 @@ Authorization:"Bearer "+ token
                 (res)=>{
                         console.log("Product added successfully")
                         console.log(res.data)
+                        toast.success("Product added successfully");
+                        Navigate("/admin/products")
                 }
         ).catch(
                 (error)=>{
                         console.error("Error adding product: ",error);
+                        toast.error("Failed to add product")
                 }
         )
         console.log(productData);
-}
 
+                }
 
     return(
         <div className="w-full h-full flex justify-center items-center">
@@ -89,8 +109,15 @@ Authorization:"Bearer "+ token
             </div>
             <div className="w-[500px] flex flex-col gap-[5px]">
                     <label className="text-sm font-semibold">Images</label>
-                    <input type="text" value={images} onChange={(e)=>{setImages(e.target.value)}} className="w-full h-[40px] border-[1px] rounded-md"/>
-
+                    <input multiple
+                    type="file" 
+                     onChange={(e)=>{
+                       //console.log(e.target.files)
+                        setImages(e.target.files)
+                     }
+                }
+                         className="w-full h-[40px] border-[1px] rounded-md"/>
+                     
 
             </div>
             <div className="w-[500px] flex flex-col gap-[5px]">
@@ -136,5 +163,6 @@ Authorization:"Bearer "+ token
             
         </div>
         </div>
+                
     )
 }
