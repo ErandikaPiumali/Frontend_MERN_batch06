@@ -28,8 +28,8 @@ upsert:false
             resolve(publicUrl)
         }
     ).catch(
-        (error)=>{
-            console.error("Error uploading file: "+error);
+        ()=>{
+            //console.error("Error uploading file: "+error);
             reject("Failed to uplaod file");
         }
     )

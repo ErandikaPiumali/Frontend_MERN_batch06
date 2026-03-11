@@ -21,15 +21,20 @@ export default function AddProductPage(){
 
 
                 async function handleSubmit(){
+
                        const promiseArray=[]
+
                         for(let i=0;i<images.length;i++){
-                                const responses=await Promise.all(promiseArray)
-                                console.log(responses)
+
+                              
                                 
                                 const promise=uploadFile(images[i])
                               //  console.log(images[i]);
                               promiseArray[i]=promise
                         }
+
+                          const responses=await Promise.all(promiseArray)
+                                console.log(responses)
                        
     const  altNamesInArray = alternativeNames.split(",")
                     
@@ -39,7 +44,7 @@ export default function AddProductPage(){
                 altNames:altNamesInArray,
                 labelledPrice:labelledPrice,
                 price:price,
-                images:[],
+                images:responses,
                 description:description,
                 stock:stock,
                 isAvailable:isAvailable,
@@ -48,7 +53,8 @@ export default function AddProductPage(){
         }
         const token=localStorage.getItem("token")
         if(token==null){
-                window.location.href="/login";
+              //  window.location.href="/login";
+              Navigate("/login");
                 return;
         }
 
