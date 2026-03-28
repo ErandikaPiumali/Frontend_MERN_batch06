@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { BiPlus, BiTrash } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
+import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
+import { Link,  useNavigate } from "react-router-dom";
+import Loader from "../../src/components/loader";
+
+
 
 //Following are sample data set to test frontend without running backend.
-const sampleProducts=[
+/*const sampleProducts=[
     
   {
     "productId": "P001",
@@ -67,30 +70,35 @@ const sampleProducts=[
     "isAvailable": true,
     "category": "cosmetics"
   }
-];
+];*/
 
 
 
 export default function ProductAdminPage(){
 
-  const[products,setProducts] =useState(sampleProducts)
-  const[a,setA]=useState(0);
+  const[products,setProducts] =useState([])
+  const [isLoading,setIsloading] =useState(true)
+  //const[a,setA]=useState(0);
+ 
 
   useEffect(
     ()=>{
+      if(isLoading){
       axios.get(import.meta.env.VITE_BACKEND_URL +"/api/products").then(
         (res)=>{
           setProducts(res.data)
+          setIsloading(false);
         }
       )
-    },[a]
+    }
+    },[isLoading]
   )
   const navigate = useNavigate()
     
     return(
     <div className="w-full h-full border-[3px]">
         
-            <table>
+           {isLoading?<Loader/>: <table>
                 <thead>
                     <tr>
                         <th className="p-[10px]">Images</th>
@@ -125,7 +133,8 @@ export default function ProductAdminPage(){
                      <td className="p-[10px]">{product.labelledPrice}</td>
                        <td className="p-[10px]">{product.category}</td>
                         <td className="p-[10px]">{product.stock}</td>
-                      <td className="10px">  <BiTrash className="bg-red-500 p-[7px] text-3xl rounded-full text-white shadow-2xl shadow-black cursor-pointer"
+                      <td className="p-[10px] flex flex-row items-center justify-center" > 
+                         <BiTrash className="bg-red-500 p-[7px] text-3xl rounded-full text-white shadow-2xl shadow-black cursor-pointer"
                       onClick={
                         ()=>{
                           const token=localStorage.getItem("token");
@@ -144,7 +153,8 @@ export default function ProductAdminPage(){
                               console.log("Product deleted successfully");
                               console.log(res.data);
                               toast.success("Product deleted successfully");
-                              setA(a+1);
+                            //  setA(a+1);
+                            setIsloading(!isLoading);
                             }
                           ).catch(
                             (error)=>{
@@ -155,6 +165,17 @@ export default function ProductAdminPage(){
 
                         }
                       }/>
+                      <BiEdit onClick={
+                        ()=>{
+                          navigate("/admin/updateProduct",
+                            {
+                              state:product
+                            }
+
+                          );
+                        }
+                      }
+                      className="bg-blue-500 p-[7px] text-3xl rounded-full text-white shadow-2xl shadow-black cursor-pointer ml-[10px]" />
                       </td>
                   </tr>
                 
@@ -163,7 +184,7 @@ export default function ProductAdminPage(){
       )
         }
          </tbody>
-            </table>
+            </table>}
         <Link to={"/admin/newProduct"} className="fixed right-[60px] bottom-[60px] text-white bg-black p-[20px] rounded-full shadow-2xl">
             <BiPlus className="text-3xl"/>
 

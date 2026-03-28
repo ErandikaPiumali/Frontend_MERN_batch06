@@ -7,6 +7,7 @@ import './App.css'
 import AdminPage from '../pages/adminPages'
 import TestPage from '../pages/testPage'
 import { Toaster } from 'react-hot-toast'
+import ClientWebPage from '../pages/client/clientPage.jsx'
 
 
 function App() {
@@ -20,11 +21,13 @@ function App() {
 
           <Toaster position="top-right"/>
            <Routes path="/">
-          <Route path="/" element={<HomePage/>}/>
+
            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/test" element={<TestPage/>}/>
             <Route path="/register" element={<RegisterPage/>}/>
             <Route path="/admin/*" element={<AdminPage/>}/>
-            <Route path="/test" element={<TestPage/>}/>
+           
+            <Route path="/*" element={<ClientWebPage/>}/>
           </Routes>
          
         </div>
